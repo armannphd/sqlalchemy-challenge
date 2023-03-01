@@ -109,6 +109,19 @@ def tobs():
 
     return jsonify(all_measurement)
 
+@app.route("/api/v1.0/date")
+def start_temps(date):
+    """Fetch the Justice League character whose real_name matches
+       the path variable supplied by the user, or a 404 if not."""
+    
+    session = Session(engine)
+    date = ('2016-08-23')
+    t_min = session.query(func.min(Measurement.tobs)).filter(Measurement.date == date)
+    t_max = session.query(func.max(Measurement.tobs)).filter(Measurement.date == date)
+    t_avg = session.query(func.avg(Measurement.tobs)).filter(Measurement.date == date) 
 
+    return jsonify(t_min, t_max, t_avg)
+
+    
 if __name__ == '__main__':
     app.run(debug=True)
