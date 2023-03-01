@@ -114,35 +114,52 @@ def tobs():
 @app.route("/api/v1.0/<start>")
 def dynamic_route_start_only(start):
     session = Session(engine)
+    
+    t_min = func.min(Measurement.tobs)
+    t_max = func.max(Measurement.tobs)
+    t_avg = func.avg(Measurement.tobs)
 
-    params = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+    params = [t_min, t_max, t_avg]
 
     temps = session.query(*params).\
         filter(Measurement.date >= start).all()
         
     session.close()
-
-    # Convert list of tuples into normal list
-    temp_data = list(np.ravel(temps))
     
-    return jsonify(temp_data)
+    all_temp_aggs = []
+    for t_min, t_max, t_avg in temps:
+        temp_aggs_dict = {}
+        temp_aggs_dict["t_min"] = t_min
+        temp_aggs_dict["t_max"] = t_max
+        temp_aggs_dict["t_avg"] = t_avg
+        all_temp_aggs.append(temp_aggs_dict)
+
+    return jsonify(all_temp_aggs)
 
 @app.route("/api/v1.0/<start>/<end>")
 def dynamic_route_start_and_end(start, end):
     session = Session(engine)
-
     
-    params = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+    t_min = func.min(Measurement.tobs)
+    t_max = func.max(Measurement.tobs)
+    t_avg = func.avg(Measurement.tobs)
+
+    params = [t_min, t_max, t_avg]
 
     temps_02 = session.query(*params).\
         filter(Measurement.date >= start, Measurement.date <= end).all()    
 
     session.close()
 
-    # Convert list of tuples into normal list
-    temp_data = list(np.ravel(temps_02))
-    
-    return jsonify(temp_data)
+    all_temp_aggs = []
+    for t_min, t_max, t_avg in temps_02:
+        temp_aggs_dict = {}
+        temp_aggs_dict["t_min"] = t_min
+        temp_aggs_dict["t_max"] = t_max
+        temp_aggs_dict["t_avg"] = t_avg
+        all_temp_aggs.append(temp_aggs_dict)
+
+    return jsonify(all_temp_aggs)
     
 if __name__ == '__main__':
     app.run(debug=True)
