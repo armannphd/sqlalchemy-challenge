@@ -112,22 +112,15 @@ def tobs():
     return jsonify(all_measurement)
 
    
-
-
-
-@app.route("/api/v1.0/date")
-def date():
+@app.route("/api/v1.0/<start>")
+def dynamic_route_start_only(start):
     session = Session(engine)
 
-    """Return a list of all countries"""
-    # Query all passengers
-    date = ('2016-08-23')
-    sel = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+    params = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
 
-    temps = session.query(*sel).\
-        filter(Measurement.date >= date).all()
-    
-
+    temps = session.query(*params).\
+        filter(Measurement.date >= start).all()
+        
     session.close()
 
     # Convert list of tuples into normal list
@@ -135,23 +128,20 @@ def date():
     
     return jsonify(temp_data)
 
-@app.route("/api/v1.0/<start>")
-def dat(start):
+@app.route("/api/v1.0/<start>/<end>")
+def dynamic_route_start_and_end(start, end):
     session = Session(engine)
 
-    """Return a list of all countries"""
-    # Query all passengers
     
-    sel = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+    params = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
 
-    temps = session.query(*sel).\
-        filter(Measurement.date >= start).all()
-    
+    temps_02 = session.query(*params).\
+        filter(Measurement.date >= start, Measurement.date <= end).all()    
 
     session.close()
 
     # Convert list of tuples into normal list
-    temp_data = list(np.ravel(temps))
+    temp_data = list(np.ravel(temps_02))
     
     return jsonify(temp_data)
     
