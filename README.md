@@ -16,7 +16,7 @@ Make note, there are two charts, one corresponding to all data from each date pl
 
 # app-Andaya.py NOTES
 
-For the dynamic route portion of the code (i.e. looking for minimum, maximum, and average temps for specific dates), dates inputted should be in the format of year-month-day into the URL
+For the dynamic route portion of the code (i.e. looking for minimum, maximum, and average temps for specific date ranges), dates inputted should be in the format of year-month-day into the URL
 
 
 For year, four numbers are needed, for month or day, two numbers are needed for each
