@@ -105,14 +105,14 @@ def tobs():
     session.close()
 
     # Create a dictionary from the row data and append to a list 
-    all_measurement = []
+    tobs_data = []
     for date, tobs in temp_at_most_active_station:
-        measurement_dict = {}
-        measurement_dict["date"] = date
-        measurement_dict["tobs"] = tobs
-        all_measurement.append(measurement_dict)
+        tobs_dict = {}
+        tobs_dict["date"] = date
+        tobs_dict["tobs"] = tobs
+        tobs_data.append(tobs_dict)
 
-    return jsonify(all_measurement)
+    return jsonify(tobs_data)
 
    
 @app.route("/api/v1.0/<start>")
