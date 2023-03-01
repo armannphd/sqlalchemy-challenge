@@ -135,7 +135,7 @@ def date():
     
     return jsonify(temp_data)
 
-@app.route("/api/v1.0/date/<start>")
+@app.route("/api/v1.0/<start>")
 def dat(start):
     session = Session(engine)
 
