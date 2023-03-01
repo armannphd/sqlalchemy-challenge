@@ -5,6 +5,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
+
 import datetime as dt
 
 from flask import Flask, jsonify
@@ -40,7 +41,8 @@ def welcome():
         f"Available Routes:<br/>"
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
-        f"/api/v1.0/tobs"
+        f"/api/v1.0/tobs<br/>"
+        f"/api/v1.0/date"
     )
 
 
@@ -109,19 +111,49 @@ def tobs():
 
     return jsonify(all_measurement)
 
+   
+
+
+
 @app.route("/api/v1.0/date")
-def start_temps(date):
-    """Fetch the Justice League character whose real_name matches
-       the path variable supplied by the user, or a 404 if not."""
-    
+def date():
     session = Session(engine)
+
+    """Return a list of all countries"""
+    # Query all passengers
     date = ('2016-08-23')
-    t_min = session.query(func.min(Measurement.tobs)).filter(Measurement.date == date)
-    t_max = session.query(func.max(Measurement.tobs)).filter(Measurement.date == date)
-    t_avg = session.query(func.avg(Measurement.tobs)).filter(Measurement.date == date) 
+    sel = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
 
-    return jsonify(t_min, t_max, t_avg)
+    temps = session.query(*sel).\
+        filter(Measurement.date >= date).all()
+    
 
+    session.close()
+
+    # Convert list of tuples into normal list
+    temp_data = list(np.ravel(temps))
+    
+    return jsonify(temp_data)
+
+@app.route("/api/v1.0/date/<start>")
+def dat(start):
+    session = Session(engine)
+
+    """Return a list of all countries"""
+    # Query all passengers
+    
+    sel = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+
+    temps = session.query(*sel).\
+        filter(Measurement.date >= start).all()
+    
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    temp_data = list(np.ravel(temps))
+    
+    return jsonify(temp_data)
     
 if __name__ == '__main__':
     app.run(debug=True)
