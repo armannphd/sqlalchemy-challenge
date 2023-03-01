@@ -54,19 +54,23 @@ def precipitation():
     # Query prcp for last 12 monthsall passengers
     all_prcp_data = [Measurement.date, Measurement.prcp]
     year_ago_date = dt.datetime(2016, 8, 22)
-    results = session.query(*all_prcp_data).filter(Measurement.date > year_ago_date).order_by(Measurement.date).all()
+    # results = session.query(*all_prcp_data).filter(Measurement.date > year_ago_date).order_by(Measurement.date).all()
+    prcp_query = session.query(*all_prcp_data).filter(Measurement.date > year_ago_date).order_by(Measurement.date).all()
 
     session.close()
 
     # Create a dictionary from the row data and append to a list 
-    all_measurement = []
-    for date, prcp in results:
-        measurement_dict = {}
-        measurement_dict["date"] = date
-        measurement_dict["prcp"] = prcp
-        all_measurement.append(measurement_dict)
+    
+    prcp_data =[]
+    
+    for date, prcp in prcp_query:
+        prcp_dict = {}
+        prcp_dict["date"] = date
+        prcp_dict["prcp"] = prcp
+        prcp_data.append(prcp_dict)
 
-    return jsonify(all_measurement)
+
+    return jsonify(prcp_data)
 
 @app.route("/api/v1.0/stations")
 def stations():
