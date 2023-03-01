@@ -1,6 +1,7 @@
 # sqlalchemy-challenge
 
 There are two files, app-Andaya.py, and climate_starter-Andaya.ipynb
+
 The Resources folder contains the sqlite database
 
 # climate_starter-Andaya.ipynb NOTES
