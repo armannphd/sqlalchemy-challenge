@@ -47,19 +47,19 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    # Create our session (link) from Python to the DB
+    # Create session (link) from Python to the DB
     session = Session(engine)
 
     """Return prcp from last year"""
-    # Query prcp for last 12 monthsall passengers
+    # Query prcp for last 12 months
     all_prcp_data = [Measurement.date, Measurement.prcp]
     year_ago_date = dt.datetime(2016, 8, 22)
-    # results = session.query(*all_prcp_data).filter(Measurement.date > year_ago_date).order_by(Measurement.date).all()
+    
     prcp_query = session.query(*all_prcp_data).filter(Measurement.date > year_ago_date).order_by(Measurement.date).all()
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list 
+    # Create a dictionary from the data and append to a list 
     
     prcp_data =[]
     
@@ -77,8 +77,7 @@ def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of all passenger names"""
-    # Query all passengers
+    # Query all stations
     stations = session.query(Station.station).all()
 
     session.close()
@@ -94,7 +93,7 @@ def tobs():
     session = Session(engine)
 
     """Return tobs from last year"""
-    # Query prcp for last 12 monthsall passengers
+    # Query tobs for last 12 months
     tobs_data = [Measurement.date, Measurement.tobs]
     year_ago_date = dt.datetime(2016, 8, 22)
     temp_at_most_active_station = session.query(*tobs_data).\
